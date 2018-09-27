@@ -25,11 +25,15 @@ class Board:
         result = False
         color = (self.getStone(position)).getColor()
         if position%2==1:
-            result = result or (self._stoneArray[position.getRing()][position.getNumber()-1 %8]==color and self._stoneArray[position.getRing()][position.getNumber()+1 %8]==color)
-            result = result or (self._stoneArray[position.getRing()-1 %3][position.getNumber()]==color and self._stoneArray[position.getRing()+1 %3][position.getNumber()]==color)
+            result = result or (self._stoneArray[position.getRing()][position.getNumber()-1 %8]==color 
+                                and self._stoneArray[position.getRing()][position.getNumber()+1 %8]==color)
+            result = result or (self._stoneArray[position.getRing()-1 %3][position.getNumber()]==color 
+                                and self._stoneArray[position.getRing()+1 %3][position.getNumber()]==color)
         else:
-            result = result or (self._stoneArray[position.getRing()][position.getNumber()-2 %8]==color and self._stoneArray[position.getRing()][position.getNumber()-1 %8]==color)
-            result = result or (self._stoneArray[position.getRing()][position.getNumber()+1 %8]==color and self._stoneArray[position.getRing()][position.getNumber()+2 %8]==color)
+            result = result or (self._stoneArray[position.getRing()][position.getNumber()-2 %8]==color 
+                                and self._stoneArray[position.getRing()][position.getNumber()-1 %8]==color)
+            result = result or (self._stoneArray[position.getRing()][position.getNumber()+1 %8]==color 
+                                and self._stoneArray[position.getRing()][position.getNumber()+2 %8]==color)
         return result
     
 
