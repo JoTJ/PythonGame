@@ -1,2 +1,2 @@
 # PythonGame
-Game mill
+Game 'Nine Men's Morris'
