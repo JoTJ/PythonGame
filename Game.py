@@ -3,17 +3,11 @@ class Game:
     def __init__(self):
         """Erstellt ein neues Spielfeld für das aktuelle Spiel"""
         self._board = Board.Board()
-    #    self._phaseOfPlayer1 = 1
-     #   self._phaseOfPlayer2 = 1
         self._playerOnTurn = 1
-    #    self._status = ""
         self._previousClickedStone = None
-    #    self._player1stonesToSet = 9
-     #   self._player2stonesToSet = 9
         self._numberOfTurnsWithoutMill = 0
         self._player1 = Player.Player("white",self._board)
         self._player2 = Player.Player("black",self._board)
-        ##Programmlogik
 
     def getPlayerOnTurn(self):
         """Gibt zurück, welcher Spieler gerade am Zug ist (True: Spieler 1, False: Spieler 2)"""
