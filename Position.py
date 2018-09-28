@@ -7,4 +7,4 @@ class Position:
         return self._number
     
     def getRing(self):
-        return self.ring
+return self.ring

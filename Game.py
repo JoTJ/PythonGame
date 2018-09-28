@@ -1,136 +1,190 @@
-import Board, Stone
+import Board, Stone, Player
 class Game:
     def __init__(self):
         """Erstellt ein neues Spielfeld für das aktuelle Spiel"""
         self._board = Board.Board()
-        self._phaseOfPlayer1 = 1
-        self._phaseOfPlayer2 = 1
-        self._playerOnTurn = True
-        self._status = ""
+    #    self._phaseOfPlayer1 = 1
+     #   self._phaseOfPlayer2 = 1
+        self._playerOnTurn = 1
+    #    self._status = ""
         self._previousClickedStone = None
-        self._player1stonesToSet = 9
-        self._player2stonesToSet = 9
+    #    self._player1stonesToSet = 9
+     #   self._player2stonesToSet = 9
         self._numberOfTurnsWithoutMill = 0
+        self._player1 = Player.Player("white",self._board)
+        self._player2 = Player.Player("black",self._board)
         ##Programmlogik
 
     def getPlayerOnTurn(self):
         """Gibt zurück, welcher Spieler gerade am Zug ist (True: Spieler 1, False: Spieler 2)"""
         return self._playerOnTurn
     
-    def getPhaseOfPlayer(self, player):
-        """Gibt die aktuelle Phase eines Spielers zurück (True: Spieler 1, False: Spieler 2)"""
-        if player:
-            return self._phaseOfPlayer1
+    def getPhaseOfPlayer(self, playerNumber):
+        """Gibt die aktuelle Phase eines Spielers zurück (1: Spieler 1, 2: Spieler 2)"""
+        if playerNumber == 1:
+            self_player1.getPhase()
         else:
-           return self._phaseOfPlayer2
-
-    def getStatus(self):
-        """Gibt den aktuellen Spielstatus zurück"""
-        self._status
-
+            self_player2.getPhase()
+        
+    def getStatus(self,playerNumber):
+        """Gibt den aktuellen Status eines Spielers zurück (1: Spieler 1, 2: Spieler 2)"""
+        if playerNumber == 1:
+            self._player1.getStatus()
+        else:
+            self._player2.getStatus()
+        
     def getBoard(self):
         return self._board
 
-    def handleClick(self, position):
-        self._status = ""
-        colorOnThisTurn = True if self._playerOnTurn else False
-        phaseOnThisTurn = self._phaseOfPlayer1 if self._playerOnTurn else self._phaseOfPlayer2
-        phaseOfOtherPlayer = self._phaseOfPlayer2 if self._playerOnTurn else self._phaseOfPlayer1
-
+    def handleClick(self):
+        GUI.printPlayerOnTurn(playerOnTurn)        
         
-        stoneOnThisTurn = self._board.getStone(position.getRing(),position.getNumber())
-        if phaseOnThisTurn==1:
-            if stoneOnThisTurn!="":
-                self._status == "Feld bereits belegt"
-                return
-            else:
-                stoneOnThisTurn = Stone(position,colorOnThisTurn,self._board)
-                self._player1stonesToSet=self._player1stonesToSet-1 if self._playerOnTurn else self._player2stonesToSet=self._player2stonesToSet-1
-                if self._player1stonesToSet==0:
-                    self._phaseOfPlayer1 = 2
-                if self._player2stonesToSet==0:
-                    self._phaseOfPlayer2 = 2                            
-                         
-        elif phaseOnThisTurn==2:
-            inputFinished = False
-            while not(inputFinished):
-                if stoneOnThisTurn=="" or stoneOnThisTurn.color != colorOnThisTurn:
-                    self._status = "Es muuss ein eigener Stein, der bewegt werden soll, gewählt werden"
-                    return
-                else:
-                    newPlace = GUI.askForNewPlaceOfStone();
-                    selectedStone = self._board.getStone(newPlace)
-                    if selectedStone!="":
-                        if selectedStone.Color == colorOnThisTurn:
-                            #Stein, der beweget werden soll, wrid überschrieben
-                            stoneOnThisTurn = selectedStone
-                            continue
-                        else:
-                            return
-                    else:
-                        if self._board.checkMove(stoneOnThisTurn, newPlace):
-                            #Move
-                            stoneOnThisTurn.move(newPlace,2)
-                            break
-                        else:
-                            self._status = "In Phase 2 muss ein benachbartes Feld gewählt werden. Wähle erneut einen Stein und dann ein benachbartes Feld"
-                            return                    
-        elif phaseOnThisTurn == 3:
-            inputFinished = False
-            while not(inputFinished):
-                if stoneOnThisTurn=="" or stoneOnThisTurn.color != colorOnThisTurn:
-                    self._status = "Es muuss ein eigener Stein, der bewegt werden soll, gewählt werden"
-                    return
-                else:
-                    newPlace = GUI.askForNewPlaceOfStone();
-                    selectedStone = self._board.getStone(newPlace)
-                    if selectedStone!="":
-                        if selectedStone.Color == colorOnThisTurn:
-                            #Stein, der beweget werden soll, wrid überschrieben
-                            stoneOnThisTurn = selectedStone
-                            continue
-                        else:
-                            return
-                    else:
-                        #Move
-                        stoneOnThisTurn.move(newPlace,3)
-                        inputFinished = True
-                        
-        if stoneOnThisTurn.isInMill():
-            self._numberOfTurnsWithoutMill=0
-            allowedToRemove = False
-            while not(allowedToRemove):
-                positionOfstoneToRemove = GUI.askForStoneToRemove()
-                if self._board.getStone(positionOfstoneToRemove)=="":
-                    GUI.printWrongMoveMessage("Es muss ein Stein gewählt werden")
-                    break;
-                stoneToRemove = self._board.getStone(positionOfstoneToRemove)
-                if stoneToRemove.getColor()==colorOnThisTurn:
-                    GUI.printWrongMoveMessage("Es muss ein gegnerischer Stein gewählt werden")
-                if  not(stoneToRemove.IsInMill()):
-                    allowedToRemove = True
-                    break
-                else:
-                    if self._board.getNumberOfStonesOutsideFromMills(not(ColorOnThisTurn)==0):
-                        allowedToRemove = True
-                        break
-                    else:
-                        GUI.printWrongMoveMessage("Dieser Stein darf nicht entfernt werden")
-                    
-            self._board.removeStone(stoneToRemove)
-            if self._board.numberOfStones(not(colorOnThisTurn))==3:
-                self._phaseOfPlayer1=3 if playerOnTurn else self._phaseOfPlayer2=3
-            if self._board.numberOfStones(not(colorOnThisTurn))<3:
-                self._status = "Spielende"
-                #Gewinner ist am Zug
-                GUI.endOfGame(self._playerOnTurn)
-                
-            self._playerOnTurn = not(self._playerOnTurn)
+        # Informationen über den Zug holen
+        if playerOnTurn == 1:
+            actualPlayer = self._player1
+            actualColor = "white"
         else:
-            self._numberOfTurnsWithoutMill+=1                        
+            actualPlayer = self._player2
+            actualColor = "black"
+        actualPhase = actualPlayer.getPhase()
+        
+        #Zug in Phase 2 möglich?
+        if actualPhase == 2:
+            if self._board.everythingBlocked(actualColor):
+                GUI.Message("Kein Zug möglich. Passe.")
+                time.sleep(5)
+                self._changeTurn()
+                return
             
-        if self._numberOfTurnsWithoutMill >=50:
-            GUI.remis("50 Züge ohne Mühle")
-            #check for remis
-        if self._board.saveBoardConfig():
-            GUI.remis("3mal die gleiche Stellung. Unentschieden")                
+        #Phase 1 - setzen
+        if actualPhase == 1:
+            GUI.Message("Wähle Feld, um Stein zu platzieren")
+            clickAccepted = False
+            while not(clickAccepted):
+                positionToSet = GUI.GetClick()
+                #Gültige Eingabe
+                if (self._board.checkMove(positionToSet,1)):
+                    clickAccepted = True
+                    newStone = Stone.Stone(positionToSet,actualColor,self._board)
+                    continue
+                #Ungültige Eingabe
+                else:
+                    GUI.Message("Ungültiges Feld. Wähle Feld, um Stein zu platzieren")
+            
+            #neuen Stein setzen
+            self._board.setStone(Stone.Stone(positionToSet,actualColor,self._board))
+            affectedPosition = positionToSet
+        
+        #Phase 2/3 - ziehen
+        else:
+            #gültige Eingabe holen
+            GUI.Message("Wähle Stein, der bewegt werden soll")
+            firstClickAccepted = False
+            bothClicksAAccepted = False
+            while not(bothClicksAAccepted):
+                while not(firstClickAccepted):
+                    positionFrom = GUI.GetClick()
+                    #Ungültiger 1. Click
+                    if self._board.checkOccupancy()!=actualColor:
+                        GUI.Message("Du musst einen eigenen Stein wählen.")
+                        continue
+                    #Gültiger 1. Click
+                    else:
+                        firstClickAccepted = True
+                
+                #Nachricht für 2. Click
+                if (actualPhase == 2):
+                    GUI.Message("Wähle neue Position des Steins")
+                else:
+                    GUI.Message("Wähle neue Position des Steins. Du darfst Springen")
+                
+                positionTo = GUI.GetClick()
+                #Gültiger 2.Click
+                if (self._board.checkMove(positionFrom,positionTo,actualPhase)):
+                    affectedPosition = positionTo
+                    break
+                #Ungültiger 2. Click. Starte wieder beim ersten Click (evtl kein gültiger 2.Click möglich)
+                else:
+                    GUI.Message("Wähle Stein, der bewegt werden soll")
+                    firstClickAccepted = False
+         
+        ###    
+        #Zug ausführen
+        
+        #Stein von alter Position entfernen (durch Zug) - in Phase 2 oder 3 
+        if actualPhase!=1:
+            newStone = Stone.Stone(positionTo,actualColor,self._board)
+            self._board.removeStone(positionFrom)
+        self._board.setStone(newStone)
+        
+        #Auf Mühle prüfen
+        if self._board.isMill(affectedPosition):
+            
+            #Anzahl Züge ohne Mühle zurücksetzen
+            self._numberOfTurnsWithoutMill = 0
+            
+            #Stein entfernen
+            GUI.Message("Stein entfernen")
+            clickAccepted = False
+            while not(clickAccepted):
+                positionToRemove = GUI.GetClick()
+                
+                #Stein muss Farbe des Gegners haben (wird in board.checkRemoveability geprüft)
+                if actualColor == "white":
+                    otherColor = "black"
+                else:
+                    otherColor = "white"
+                #Prüfen, ob Stein entfernt werden darf
+                if self._board.checkRemoveability(positionToRemove,otherColor):
+                    clickAccepted = True
+                    #Stein nun entfernen
+                    self._board.removeStone(positionToRemove)
+                #Falsche Wahl mitteilen
+                else:
+                    GUI.Message("Es muss ein gegnerischer Stein gewählt werden, der sich nicht in einer Mühle befindet (wenn der Gegner nicht nur Mühlen hat)")
+
+        #Keine Mühle
+        else:
+            #Anzahl Züge ohne Mühle erhöhen
+            self._numberOfTurnsWithoutMill += 1
+        
+        
+        ###Daten aktualisieren
+        #Anzahl gesetzter Steine aktualisieren
+        if actualPhase == 1:
+            actualPlayer.increaseStonesSet()
+        ChangeTurn()
+        self._board.saveBoardConfig()
+        #Auf Ende überprüfen
+        self.CheckGameGoesOn()
+        
+    def CheckGameGoesOn(self):
+        #Züge ohne Mühle
+        if self._numberOfTurnsWithoutMill >= 50:
+            self._player1.setStatus("Remis. 50 Züge ohne Mühle")            
+            self._player2.setStatus("Remis. 50 Züge ohne Mühle")
+            GUI.EndGame()
+        #Gleiche Stellung
+        if self._board.getNumberOfActualBoardConfig >= 3:
+            self._player1.setStatus("Remis. 3x gleiche Stellung")            
+            self._player2.setStatus("Remis. 3x gleiche Stellung")
+            GUI.EndGame()
+        #Niederlage Spieler 1
+        if self._player1.getStonesInGame < 3:
+            self._player1.setStatus("Verloren")            
+            self._player2.setStatus("Gewonnen")
+            GUI.EndGame()
+        #Niederlage Spieler 2
+        if self._player2.getStonesInGame < 3:
+            self._player2.setStatus("Verloren")            
+            self._player1.setStatus("Gewonnen")
+            GUI.EndGame()
+
+                
+    def changeTurn(self):
+        if self._playerOnTurn = 1:
+            self._playerOnTurn = 2
+        else:
+            self._playerOnTurn = 1
+            
+    

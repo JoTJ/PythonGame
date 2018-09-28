@@ -8,13 +8,16 @@ class Stone:
         self._color = color
         self._board = board
     
-    def getColor(self):
+    def getColor(self): 
         """Gibt die Farbe dieses Steins zurück"""
         return self._color
 
     def isInMill(self):
         """Prüft, ob dieser Stein in einer Mühle ist"""
         self._board.isMill(self._position)
+        
+    def getPosition(self):
+        return self._position
 
     def move(self, newPosition, phase):
         """Bewegt einen Stein, sofern zulässig"""
@@ -24,4 +27,4 @@ class Stone:
             self._position = newPosition
         else:
             #TODO
-            pass
+pass
