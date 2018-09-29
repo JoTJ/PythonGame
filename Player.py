@@ -1,4 +1,4 @@
-import board
+import Board, Stone, Position
 class Player:
     """Ein Spieler"""
     def __init__(self, color, board):
@@ -11,7 +11,7 @@ class Player:
         return self._board.numberOfStones(self._color)
         
     def increaseStonesSet(self):
-        self._stonesSet() += 1
+        self._stonesSet += 1
     
     def getStonesSet(self):
         return self._stonesSet
@@ -29,10 +29,10 @@ class Player:
         if self._stonesSet < 9:
             return 1
         else:
-            if self._numberOfStones > 3:
+            if self.numberOfStones() > 3:
                 return 2
             else:
                 return 3
             
     def numberOfStones(self):
-        self._board.numberOfStones(self._color)
+        return self._board.numberOfStones(self._color)

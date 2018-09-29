@@ -1,4 +1,4 @@
-import Board
+import Board, Player, Position
 class Stone:
     """Ein Spielstein"""
 
@@ -18,13 +18,12 @@ class Stone:
         
     def getPosition(self):
         return self._position
-
-    def move(self, newPosition, phase):
-        """Bewegt einen Stein, sofern zulässig"""
-        if self._board.checkMove(self._position, newPosition, phase):
-            self._board.remove(self._position)
-            self._board.setStone(self, newPosition)
-            self._position = newPosition
-        else:
-            #TODO
-pass
+#
+#    def move(self, newPosition, phase):
+#        """Bewegt einen Stein, sofern zulässig"""
+#        if self._board.checkMove(self._position, newPosition, phase):
+#            self._board.remove(self._position)
+#            self._board.setStone(self, newPosition)
+#            self._position = newPosition
+#        else:
+#            #TODO
